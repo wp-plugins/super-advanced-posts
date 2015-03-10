@@ -1,0 +1,34 @@
+.super_advanced_posts * {
+	margin: 0;
+	padding: 0;
+}
+.super_advanced_posts {
+	font-size: 12px;
+	line-height: 19px;
+}
+.super_advanced_posts .post-title {
+	font-size: 13px;
+	font-weight: bold;
+}
+.super_advanced_posts .post-date {
+	font-style: italic;
+}
+.super_advanced_posts img {
+	float: left;
+	margin-right: 10px;
+	margin-top: 5px;
+}
+.super_advanced_posts ul li {
+	list-style: none;
+	list-style-type: none;
+	margin: 3px 0;
+	padding: 3px 0;
+	border-bottom: 1px solid #ccc;
+}
+.super_advanced_posts .more-link {
+	display: inline;
+}
+.super_advanced_posts .post-entry {
+	padding: 0 0 5px 0;
+	overflow: hidden;
+}
