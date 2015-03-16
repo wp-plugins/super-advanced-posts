@@ -30,24 +30,26 @@ Features:
 * Display post thumbnails, with customizable size.
 * Display post excerpt and more. 
 * Provides option to:
-***show the post excerpt and how long the excerpt should be.
-***show read more link
-***override the post order to order by; date, title, random, etc.
-***post form all categories
-***select custom post type
+* show the post excerpt and how long the excerpt should be.
+* show read more link
+* override the post order to order by; date, title, random, etc.
+* post form all categories
+* select custom post type
 * Multiple widgets.
 
 
 
 == Installation ==
 
-1. Upload the `advanced-featured-post` folder to the `/wp-content/plugins/` directory
+1. Upload the `super-advanced-posts` folder to the `/wp-content/plugins/` directory
 
 2. Activate the plugin through the 'Plugins' menu in WordPress
 
 3. Place and customize your widgets
 
 4. Define the style of the links in the settings section
+
+
 
 == Frequently Asked Questions ==
 
