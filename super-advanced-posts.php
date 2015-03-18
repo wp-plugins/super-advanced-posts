@@ -157,50 +157,6 @@ echo '<option value="' . $pvalue . '"' . selected($pvalue,$post_typess ,true) . 
   </label>
 </p>
 
-
-<p>
-  <label for="<?php echo $this->get_field_id('taxcatin'); ?>">
-    <?php _e('Select Taxonomy:');
-	$taxonomies = get_object_taxonomies( (object) array( 'post_type' => $post_typess ) );
-		if ( $taxonomies && !is_wp_error( $taxonomies ) ) :
-  $select = " <select class='widefat' id=' ".$this->get_field_id( 'taxcatin' )."' name='". $this->get_field_name( 'taxcatin' )."' >";
-  $select.= "<option value='no-value'>Select Taxonomy </option>n";
-        foreach( $taxonomies as $taxonomy ) : 
-		$select.= "<option value='".$taxonomy."'";
-		if($taxonomy == $instance[ 'taxcatin' ]) {
-$select.="selected=selected";
-}
-$select.=">".$taxonomy."</option>";
-      endforeach;
-$select.= "</select>";
-    echo $select;
-endif;
-?>
-</label></p>
-
-
-<p>
- <label for="<?php echo $this->get_field_id('taxtermin'); ?>">
-    <?php _e('Select Taxonomy Term:');
-$terms = get_terms($taxcatin);
-if ( $terms && !is_wp_error( $terms ) ) :
-$selectterm = " <select class='widefat' id=' ".$this->get_field_id( 'taxtermin' )."' name='". $this->get_field_name( 'taxtermin' )."' >";    
-$selectterm .=  "<option value='no-value'>Select Term</option>";
-        foreach ( $terms as $term ) { 		
-		$selectterm .= "<option value='".$term->term_id."'";
-		if($taxtermin == $instance[ 'taxtermin' ]) {
-$selectterm.="selected=selected";
-}
-$selectterm .=">".$term->name;
-$selectterm .="</option>";
- }
-$selectterm .= '<select>';
-echo $selectterm;
- endif;
-?>
-</label></p>
-
-
 <p>
   <label for="<?php echo $this->get_field_id( 'showposts' ); ?>">
     <?php _e( 'Number of Show Posts:' ); ?>
