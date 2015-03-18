@@ -3,7 +3,7 @@
 * Plugin Name: Super Advanced Posts  
 * Plugin URI: http://www.finestdeveloper.com/plugins/super-advanced-posts  
 * Description: Adds a widget that can display recent posts and other posts from All categories and taxonomy or from custom post types.
-* Version: 1.0 
+* Version: 1.1 
 * Author: Tarun Yaduvanshi
 * Author URI: http://www.finestdeveloper.com
 */
@@ -24,13 +24,14 @@ parent::__construct('super_advanced_posts', __('Super Advanced Posts'), $widget_
 public function widget( $args, $instance ) {
 $title = apply_filters( 'widget_title', $instance['title'] );
 $post_typess = apply_filters( 'widget_post_type', $instance['post_type'] );
+$taxtermin = apply_filters( 'widget_taxcatin', $instance['taxcatin'] );
+$taxcatin = apply_filters( 'widget_term', $instance['taxtermin'] );
 $showposts = apply_filters( 'widget_showposts', $instance['showposts'] );
 $order = apply_filters( 'widget_order', $instance['order'] );
 $orderby = apply_filters( 'widget_orderby', $instance['orderby'] );
 $thumbnail = apply_filters( 'widget_thumbnail', $instance['thumbnail'] );
 $imagesize = apply_filters( 'widget_imagesize', $instance['imagesize'] );
 $date = apply_filters( 'widget_date', $instance['date'] );
-
 $excerpt = apply_filters( 'widget_excerpt', $instance['excerpt'] );
 $excerpt_length = apply_filters( 'widget_excerpt_length', $instance['excerpt_length'] );
 $readmore = apply_filters( 'widget_readmore', $instance['readmore'] );
@@ -77,6 +78,16 @@ $title = __( 'New title', 'super_advanced_posts_domain' );
 if ( isset( $instance[ 'post_type' ] ) ) {
 $post_typess = $instance[ 'post_type' ];
 }
+
+
+if ( isset( $instance[ 'taxcatin' ] ) ) {
+$taxcatin = $instance[ 'taxcatin' ];
+}
+
+if ( isset( $instance[ 'taxtermin' ] ) ) {
+$taxtermin = $instance[ 'taxtermin' ];
+}
+
 
 if ( isset( $instance[ 'showposts' ] ) ) {
 $showposts = $instance[ 'showposts' ];
@@ -145,6 +156,51 @@ echo '<option value="' . $pvalue . '"' . selected($pvalue,$post_typess ,true) . 
     </select>
   </label>
 </p>
+
+
+<p>
+  <label for="<?php echo $this->get_field_id('taxcatin'); ?>">
+    <?php _e('Select Taxonomy:');
+	$taxonomies = get_object_taxonomies( (object) array( 'post_type' => $post_typess ) );
+		if ( $taxonomies && !is_wp_error( $taxonomies ) ) :
+  $select = " <select class='widefat' id=' ".$this->get_field_id( 'taxcatin' )."' name='". $this->get_field_name( 'taxcatin' )."' >";
+  $select.= "<option value='no-value'>Select Taxonomy </option>n";
+        foreach( $taxonomies as $taxonomy ) : 
+		$select.= "<option value='".$taxonomy."'";
+		if($taxonomy == $instance[ 'taxcatin' ]) {
+$select.="selected=selected";
+}
+$select.=">".$taxonomy."</option>";
+      endforeach;
+$select.= "</select>";
+    echo $select;
+endif;
+?>
+</label></p>
+
+
+<p>
+ <label for="<?php echo $this->get_field_id('taxtermin'); ?>">
+    <?php _e('Select Taxonomy Term:');
+$terms = get_terms($taxcatin);
+if ( $terms && !is_wp_error( $terms ) ) :
+$selectterm = " <select class='widefat' id=' ".$this->get_field_id( 'taxtermin' )."' name='". $this->get_field_name( 'taxtermin' )."' >";    
+$selectterm .=  "<option value='no-value'>Select Term</option>";
+        foreach ( $terms as $term ) { 		
+		$selectterm .= "<option value='".$term->term_id."'";
+		if($taxtermin == $instance[ 'taxtermin' ]) {
+$selectterm.="selected=selected";
+}
+$selectterm .=">".$term->name;
+$selectterm .="</option>";
+ }
+$selectterm .= '<select>';
+echo $selectterm;
+ endif;
+?>
+</label></p>
+
+
 <p>
   <label for="<?php echo $this->get_field_id( 'showposts' ); ?>">
     <?php _e( 'Number of Show Posts:' ); ?>
@@ -254,40 +310,21 @@ echo ' value='. esc_attr( $imagesize ).' >' . esc_attr( $imagesize ) . '</option
 
 
  
-       <?php
-
-$taxonomies = get_taxonomies(); 
-//print_r($taxonomies);
-foreach ( $taxonomies as $taxonomy ) {
-//print_r($taxonomy);	
-     '<p>' . $taxonomy . '</p>';
-// $term = get_term( $taxonomy );
-	
-	
-	
-	$asdfasf = get_terms( $taxonomy );
-	//print_r($asdfasf);
-	foreach($asdfasf as $asdfasff)
-{echo 	$asdfasff->term_id->name;
-}
-
-}
-
-?>
- <?php 
-}
-
+<?php }
 // Updating widget replacing old instances with new
 public function update( $new_instance, $old_instance ) {
 $instance = array();
 $instance['title'] = ( ! empty( $new_instance['title'] ) ) ? strip_tags( $new_instance['title'] ) : '';
 $instance['post_type'] = ( ! empty( $new_instance['post_type'] ) ) ? strip_tags( $new_instance['post_type'] ) : '';
+$instance['taxcatin'] = ( ! empty( $new_instance['taxcatin'] ) ) ? strip_tags( $new_instance['taxcatin'] ) : '';
+$instance['taxtermin'] = ( ! empty( $new_instance['taxtermin'] ) ) ? strip_tags( $new_instance['taxtermin'] ) : '';
 $instance['showposts'] = ( ! empty( $new_instance['showposts'] ) ) ? strip_tags( $new_instance['showposts'] ) : '';
 $instance['order'] = ( ! empty( $new_instance['order'] ) ) ? strip_tags( $new_instance['order'] ) : '';
 $instance['orderby'] = ( ! empty( $new_instance['orderby'] ) ) ? strip_tags( $new_instance['orderby'] ) : '';
 $instance['thumbnail'] = ( ! empty( $new_instance['thumbnail'] ) ) ? strip_tags( $new_instance['thumbnail'] ) : '';
 $instance['imagesize'] = ( ! empty( $new_instance['imagesize'] ) ) ? strip_tags( $new_instance['imagesize'] ) : '';
 $instance['date'] = ( ! empty( $new_instance['date'] ) ) ? strip_tags( $new_instance['date'] ) : '';
+
 $instance['excerpt'] = ( ! empty( $new_instance['excerpt'] ) ) ? strip_tags( $new_instance['excerpt'] ) : '';
 $instance['excerpt_length'] = ( ! empty( $new_instance['excerpt_length'] ) ) ? strip_tags( $new_instance['excerpt_length'] ) : '';
 $instance['readmore'] = ( ! empty( $new_instance['readmore'] ) ) ? strip_tags( $new_instance['readmore'] ) : '';
