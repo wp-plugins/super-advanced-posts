@@ -64,4 +64,10 @@ See documentation at http://www.finestdeveloper.com/plugins/super-advanced-posts
 
 == Changelog == 
 
-N/A
+1.1
+
+   * Minor Fixes
+
+1.0
+
+    *First Release
