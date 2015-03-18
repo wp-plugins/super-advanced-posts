@@ -1,13 +1,28 @@
 <?php 
-query_posts('orderby='.$orderby.'&order='.$order.'&post_type='.$post_typess.'&showposts='.$showposts.''); 
-
+if($post_typess == 'post'){ 
+$the_query = new WP_Query( array( 
+  'post_type' => $post_typess,
+  'orderby' => $orderby,
+ 'category_name' => $taxcatin, 
+  'order' => $order,
+  'posts_per_page' => $showposts)); 
+}else{
+$the_query = new WP_Query( array(
+  'post_type' => $post_typess,
+  'numberposts' => $showposts,
+  'tax_query' => array(
+    array(
+      'taxonomy' => $taxtermin,
+      'terms' => $taxcatin, 
+        )
+  )
+));
+} 
 echo '<ul >';
-while (have_posts()) : the_post(); 
-echo '<li class="post-item">
-';
-
+while ( $the_query->have_posts() ) :
+   $the_query->the_post();
+ echo '<li class="post-item">';
 ?>
-
 <a class="post-title" href="<?php echo get_permalink(); ?>">
 <?php the_title(); ?>
 </a>
