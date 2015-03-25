@@ -1,6 +1,6 @@
 === Super Advanced Posts ===
 
-Contributors: tarunyaduvanshi
+Contributors: tarunyaduvanshi , deepaksharma
 
 Donate link: http://www.finestdeveloper.com/
 
