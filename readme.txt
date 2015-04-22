@@ -8,9 +8,9 @@ Tags: category, taxonomy, posts, recent, recent posts, widget, post-plugins
 
 Requires at least: 3.0
 
-Tested up to: 4.1.1
+Tested up to: 4.1.2
 
-Stable tag: 4.1
+Stable tag: 4.2
 
 
 Adds a widget that can display recent posts and other posts from all categories and taxonomy or from custom post types.
@@ -63,6 +63,10 @@ See documentation at http://www.finestdeveloper.com/plugins/super-advanced-posts
 2. Frentend Display Post
 
 == Changelog == 
+
+2.1
+
+   * Minor Changes
 
 1.1
 
