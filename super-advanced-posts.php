@@ -10,6 +10,7 @@
 
 include('include/admin-function.php');
 
+
 class super_advanced_posts extends WP_Widget {
 
 function __construct() {

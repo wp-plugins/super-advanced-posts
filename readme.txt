@@ -16,13 +16,10 @@ Stable tag: 4.2
 Adds a widget that can display recent posts and other posts from all categories and taxonomy or from custom post types.
 
 
-
 == Description ==
 
 
-
 Super Advanced Posts Plugin is a light Plugin advanced version of the WordPress Posts widget allowing increased customization to display recent posts and other posts from all categories and taxonomy or from custom post types.
-
 
 
 Features:
@@ -36,7 +33,6 @@ Features:
 * post form all categories
 * select custom post type
 * Multiple widgets.
-
 
 
 == Installation ==
