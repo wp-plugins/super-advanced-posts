@@ -60,14 +60,15 @@ See documentation at http://www.finestdeveloper.com/plugins/super-advanced-posts
 
 == Changelog == 
 
-2.1
+3.1
+	* Add Ajax in Filter Taxonomy and Terms
+	* More easily  and dynamic Post by Filter
 
-   * Minor Changes
+2.1
+	* Minor Changes
 
 1.1
-
-   * Minor Fixes
+	* Minor Fixes
 
 1.0
-
-    *First Release
+	* First Release
