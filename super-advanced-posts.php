@@ -3,13 +3,17 @@
 * Plugin Name: Super Advanced Posts  
 * Plugin URI: http://www.finestdeveloper.com/plugins/super-advanced-posts  
 * Description: Adds a widget that can display recent posts and other posts from All categories and taxonomy or from custom post types.
-* Version: 2.1 
+* Version: 3.1 
 * Author: Tarun Yaduvanshi
 * Author URI: http://www.finestdeveloper.com
 */
 
 include('include/admin-function.php');
 
+function admin_script_ss() {
+	//wp_enqueue_script( 'my_jquery_script', 'http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js' );
+}
+add_action('admin_head', 'admin_script_ss');
 
 class super_advanced_posts extends WP_Widget {
 
@@ -39,11 +43,8 @@ $readmore = apply_filters( 'widget_readmore', $instance['readmore'] );
 $excerpt_readmore = apply_filters( 'widget_excerpt_readmore', $instance['excerpt_readmore'] );
 $comment_num = apply_filters( 'widget_comment_num', $instance['comment_num'] );
 
-
-
 $new_excerpt_more= create_function('$more', 'return " ";');	
 add_filter('excerpt_more', $new_excerpt_more);
-
 
 $new_excerpt_length = create_function('$length', "return " . $excerpt_length . ";");
 
@@ -51,15 +52,62 @@ if ( $instance["excerpt_length"] > 0 ) add_filter('excerpt_length', $new_excerpt
 
 echo $args['before_widget'];
 
-
 if ( ! empty( $title ) )
 echo $args['before_title'] . $title . $args['after_title'];
+ 
+if($post_typess == 'post'){ 
+$the_query = new WP_Query( array( 
+  'post_type' => $post_typess,
+  'orderby' => $orderby,
+ 'cat' => $taxcatin, 
+  'order' => $order,
+  'posts_per_page' => $showposts)); 
+}else{
+$the_query = new WP_Query( array(
+  'post_type' => $post_typess,
+  'numberposts' => $showposts,
+  'tax_query' => array(
+    array(
+      'taxonomy' => $taxtermin,
+      'terms' => $taxcatin, 
+        )
+  )
+));
+} 
 
+echo '<ul >';
+ while ( $the_query->have_posts() ) {
+   $the_query->the_post();
+echo '<li class="post-item">';
+?>
+<a class="post-title" href="<?php echo get_permalink(); ?>"> <?php the_title(); ?> </a>
+<?php if ( $instance['date'] ) : ?>
+<p class="post-date"> <?php the_time("j M Y"); ?> </p>
+<?php endif; ?>
+<div class="post-entry">
+  <?php
+if ( has_post_thumbnail() ) {
+if($thumbnailcheck != $thumbnail){
+$post_id=get_the_ID();
+echo '<a href="'. get_permalink().'">';
+the_post_thumbnail( esc_attr( $instance[ 'imagesize' ] ) );  
+echo '</a>';
+} }
 
-
-include('include/frent-structure.php');
-
-
+if ( $instance['excerpt'] ) : 
+	if ( $instance['readmore'] ) : $linkmore = ' <a href="'.get_permalink().'" class="more-link">'.$excerpt_readmore.'</a>'; else: $linkmore =''; endif; ?>
+  <p><?php echo get_the_excerpt().$linkmore; ?> </p>
+  <?php endif; ?>
+</div>
+<?php if ( $instance['comment_num'] ) : ?>
+<p class="comment-num">(
+  <?php comments_number(); ?>
+  )</p>
+<?php endif; 
+echo '</li>';
+ }
+echo '</ul>';
+wp_reset_query();
 echo $args['after_widget'];
 
 remove_filter('excerpt_length', $new_excerpt_length);
@@ -80,7 +128,6 @@ if ( isset( $instance[ 'post_type' ] ) ) {
 $post_typess = $instance[ 'post_type' ];
 }
 
-
 if ( isset( $instance[ 'taxcatin' ] ) ) {
 $taxcatin = $instance[ 'taxcatin' ];
 }
@@ -88,7 +135,6 @@ $taxcatin = $instance[ 'taxcatin' ];
 if ( isset( $instance[ 'taxtermin' ] ) ) {
 $taxtermin = $instance[ 'taxtermin' ];
 }
-
 
 if ( isset( $instance[ 'showposts' ] ) ) {
 $showposts = $instance[ 'showposts' ];
@@ -134,8 +180,82 @@ $excerpt_readmore = $instance[ 'excerpt_readmore' ];
 if ( isset( $instance[ 'comment_num' ] ) ) {
 $comment_num = $instance[ 'comment_num' ];
 }
+?>
 
-// Widget admin form
+<script type="text/javascript">
+//<![CDATA[
+
+
+    function slectboxvalue(e){
+			jQuery('#wait_1').hide();
+		
+        //jQuery('.colorRadionew option.optionsajax').click(function(e){ alert('t');
+			var slt = document.getElementById("<?php echo $this->get_field_id('post_type'); ?>");
+			var strUser = slt.options[slt.selectedIndex].value;
+			jQuery('#wait_1').show();
+			jQuery('#<?php echo $this->get_field_id( 'taxcatin' ); ?>').hide();
+	 		jQuery.ajax({
+     		type: 'POST',
+    		url: '<?php echo admin_url(); ?>admin-ajax.php',
+  			data: {"action": "drop_1", drop_var: jQuery('#<?php echo $this->get_field_id('post_type'); ?>').val()},
+  			success: function(data, textStatus, XMLHttpRequest){
+   			jQuery('#<?php echo $this->get_field_id( 'taxcatin' ); ?>').fadeOut();
+    		jQuery('#wait_1').show();
+   			setTimeout("finishAjax('<?php echo $this->get_field_id( 'taxcatin' ); ?>', '"+escape(data)+"')", 400);
+			//	alert(data);
+			  },
+  			error: function(MLHttpRequest, textStatus, errorThrown){
+  			alert(errorThrown);
+  			}
+  			});
+    		return false;
+		//});
+
+	};
+	
+	function finishAjax(id, response) { 
+ 	jQuery('#wait_1').hide();
+  	jQuery('#result_1 #'+id).html(unescape(response));
+ 	jQuery('#result_1 #'+id).fadeIn();
+	}
+	
+	function slectTaxonomyvalue(e){
+			jQuery('#wait_2').hide();
+		
+        //jQuery('.colorTaxonomy option').click(function(e){ 
+			var slt2 = document.getElementById("<?php echo $this->get_field_id('taxcatin'); ?>");
+			var strUser2 = slt2.options[slt2.selectedIndex].value;
+			jQuery('#wait_2').show();
+			jQuery('#<?php echo $this->get_field_id( 'taxtermin' ); ?>').hide();
+	 		jQuery.ajax({
+     		type: 'POST',
+    		url: '<?php echo admin_url(); ?>admin-ajax.php',
+  			data: {"action": "drop_2", drop_var2: jQuery('#<?php echo $this->get_field_id('taxcatin'); ?>').val()},
+  			success: function(data, textStatus, XMLHttpRequest){
+   			jQuery('#<?php echo $this->get_field_id( 'taxtermin' ); ?>').fadeOut();
+    		jQuery('#wait_2').show();
+   			setTimeout("finishAjax2('<?php echo $this->get_field_id( 'taxtermin' ); ?>', '"+escape(data)+"')", 400);
+			//	alert(data);
+			  },
+  			error: function(MLHttpRequest, textStatus, errorThrown){
+  			alert(errorThrown);
+  			}
+  			});
+    		return false;
+		//});
+
+	};
+	
+	function finishAjax2(id, response) { 
+ 	jQuery('#wait_2').hide();
+  	jQuery('#result_2 #'+id).html(unescape(response));
+ 	jQuery('#result_2 #'+id).fadeIn();
+	}
+	
+	//]]>
+	
+</script>
+<?php 
 
 echo '<p>';
 echo '<label  for='. $this->get_field_id( "title" ). _e( 'Title:' ) .'></label> ';
@@ -143,21 +263,103 @@ echo '<input class="widefat"  id="'.$this->get_field_id( 'title' ). '" name="' .
 ?>
 </p>
 
+
 <p>
   <label for="<?php echo $this->get_field_id('show_type'); ?>">
     <?php _e('Show Post Type:');?>
-    <select class="widefat" id="<?php echo $this->get_field_id('post_type'); ?>" name="<?php echo $this->get_field_name('post_type'); ?>">
+    
+<select onchange="slectboxvalue();" class="widefat colorRadionew" id="<?php echo $this->get_field_id('post_type'); ?>" name="<?php echo $this->get_field_name('post_type'); ?>">
       <?php
+echo '<option class="optionsajax" value="0" >Select Post Type</option>';
+
 global $wp_post_types;
 foreach($wp_post_types as $pvalue=>$pvaluelabel) {
 if($pvaluelabel->exclude_from_search) continue;
-echo '<option value="' . $pvalue . '"' . selected($pvalue,$post_typess ,true) . '>' . $pvaluelabel->labels->name . '</option>';
+echo '<option class="optionsajax"  ';
+if($post_typess==$pvalue) {
+	echo 'selected="selected"';
+}
+ echo 'value="' . $pvalue . '">' . $pvaluelabel->labels->name . '</option>';
+
 }
 ?>
     </select>
   </label>
 </p>
+<?php
+if($taxcatin=='') {
+ ?>
+<p><span id="wait_1" style="display:none;">
+    <img alt="Please Wait" src="<?php echo plugins_url('super-advanced-posts'); ?>/images/ajax-loader.gif"/>
+    </span>
+      <span id="result_1">
+         <label for="tier_two"> Select Taxonomy:  </label> 
+         <select onchange="slectTaxonomyvalue();" class="widefat colorTaxonomy" name="<?php echo $this->get_field_name( 'taxcatin' ); ?>" id="<?php echo $this->get_field_id( 'taxcatin' ); ?>">
+             <option  value=" ">Choose one</option>
+         </select>
+         
+      </span></p>
+ <?php } else { ?>
+ <p>
+  <span id="wait_1" style="display:none;">
+    <img alt="Please Wait" src="<?php echo plugins_url('super-advanced-posts'); ?>/images/ajax-loader.gif"/>
+    </span>
+      <span id="result_1">
+         <label for="tier_two"> Select Taxonomy:  </label> 
+         <select onchange="slectTaxonomyvalue();" class="widefat colorTaxonomy" name="<?php echo $this->get_field_name( 'taxcatin' ); ?>" id="<?php echo $this->get_field_id( 'taxcatin' ); ?>">
+             <?php 
+$taxonomie = get_object_taxonomies( (object) array( 'post_type' => $post_typess ) );
+echo '<option value=" ">Choose one</option>';
+        foreach( $taxonomie as $taxonomy ) {
+        echo '<option ';
+		if($taxcatin==$taxonomy) { echo 'selected="selected"'; }
+		echo  'value="'.$taxonomy.'">'.$taxonomy.'</option>';
+} ?>
+         </select>
+         </span>
+      </p>
+ <?php } ?>
 
+<?php if ($taxtermin=='') { ?>
+ <p> 
+    <span id="wait_2" style="display:none;">
+    <img alt="Please Wait" src="<?php echo plugins_url('super-advanced-posts'); ?>/images/ajax-loader.gif"/>
+    </span>
+      <span id="result_2">
+      	<label for="<?php echo $this->get_field_id('taxtermin'); ?>"> <?php _e('Select Term:');?> </label> 
+      
+         <select class="widefat " name="<?php echo $this->get_field_name( 'taxtermin' ); ?>" id="<?php echo $this->get_field_id( 'taxtermin' ); ?>">
+             <option  value=" ">Choose one</option>
+             
+             
+         </select>
+         
+      </span></p>
+    <?php } else { ?>
+    
+    <p> 
+    <span id="wait_2" style="display:none;">
+    <img alt="Please Wait" src="<?php echo plugins_url('super-advanced-posts'); ?>/images/ajax-loader.gif"/>
+    </span>
+      <span id="result_2">
+      	<label for="<?php echo $this->get_field_id('taxtermin'); ?>"> <?php _e('Select Term:');?> </label> 
+      
+         <select class="widefat " name="<?php echo $this->get_field_name( 'taxtermin' ); ?>" id="<?php echo $this->get_field_id( 'taxtermin' ); ?>">
+         
+<?php $terms = get_terms($taxcatin);
+echo '<option value=" ">Choose one</option>';
+foreach ( $terms as $term ) { 
+ echo '<option ';
+ if($taxtermin==$term->term_id) {echo 'selected="selected"';}
+ echo 'value="'.$term->term_id.'">'.$term->name.'</option>';
+} ?>
+             
+             
+         </select>
+         
+      </span></p>
+    
+<?php } ?>
 <p>
   <label for="<?php echo $this->get_field_id( 'showposts' ); ?>">
     <?php _e( 'Number of Show Posts:' ); ?>
@@ -265,10 +467,8 @@ echo ' value='. esc_attr( $imagesize ).' >' . esc_attr( $imagesize ) . '</option
   </label>
 </p>
 
-
+ <?php } // Updating widget replacing old instances with new
  
-<?php }
-// Updating widget replacing old instances with new
 public function update( $new_instance, $old_instance ) {
 $instance = array();
 $instance['title'] = ( ! empty( $new_instance['title'] ) ) ? strip_tags( $new_instance['title'] ) : '';
@@ -281,7 +481,6 @@ $instance['orderby'] = ( ! empty( $new_instance['orderby'] ) ) ? strip_tags( $ne
 $instance['thumbnail'] = ( ! empty( $new_instance['thumbnail'] ) ) ? strip_tags( $new_instance['thumbnail'] ) : '';
 $instance['imagesize'] = ( ! empty( $new_instance['imagesize'] ) ) ? strip_tags( $new_instance['imagesize'] ) : '';
 $instance['date'] = ( ! empty( $new_instance['date'] ) ) ? strip_tags( $new_instance['date'] ) : '';
-
 $instance['excerpt'] = ( ! empty( $new_instance['excerpt'] ) ) ? strip_tags( $new_instance['excerpt'] ) : '';
 $instance['excerpt_length'] = ( ! empty( $new_instance['excerpt_length'] ) ) ? strip_tags( $new_instance['excerpt_length'] ) : '';
 $instance['readmore'] = ( ! empty( $new_instance['readmore'] ) ) ? strip_tags( $new_instance['readmore'] ) : '';
@@ -290,8 +489,35 @@ $instance['comment_num'] = ( ! empty( $new_instance['comment_num'] ) ) ? strip_t
 
 return $instance;
 }
+
 } 
-function wpb_load_widget() {
+function wpb_super_widget() {
 register_widget( 'super_advanced_posts' );
 }
-add_action( 'widgets_init', 'wpb_load_widget' );
+add_action( 'widgets_init', 'wpb_super_widget' );
+
+function drop_1()
+{  
+$drop_var = $_POST['drop_var'];
+$taxonomie = get_object_taxonomies( (object) array( 'post_type' => $drop_var ) );
+echo '<option class="optionsajax"  value=" " selected="selected">Choose one</option>';
+        foreach( $taxonomie as $taxonomy ) {
+        echo '<option class="optionsajax"  value="'.$taxonomy.'">'.$taxonomy.'</option>';
+}
+  die;
+}
+add_action( 'wp_ajax_nopriv_drop_1', 'drop_1' );
+add_action( 'wp_ajax_drop_1', 'drop_1' );
+
+function drop_2()
+{  
+$drop_var2 = $_POST['drop_var2'];
+$terms = get_terms($drop_var2);
+echo '<option value=" " selected="selected">Choose one</option>';
+foreach ( $terms as $term ) { 
+	 echo '<option value="'.$term->term_id.'">'.$term->name.'</option>';
+}
+  die;
+}
+add_action( 'wp_ajax_nopriv_drop_2', 'drop_2' );
+add_action( 'wp_ajax_drop_2', 'drop_2' );
