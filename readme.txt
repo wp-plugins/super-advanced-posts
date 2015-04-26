@@ -12,11 +12,9 @@ Tested up to: 4.1.2
 
 Stable tag: 4.2
 
-* Add Ajax in widgets Filter Taxonomy and Terms
-* More easily and dynamic Post by Filter
-
-
-Addss a widget that can display recent posts and other posts from all categories and taxonomy or from custom post types.
+* Add Ajax in widgets Filter Taxonomy and Terms.
+* More easily and dynamic Post by Filter.
+Adds a widget that can display recent posts and other posts from all categories and taxonomy or from custom post types.
 
 
 == Description ==

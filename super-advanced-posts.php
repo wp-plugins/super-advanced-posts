@@ -2,7 +2,7 @@
 /**
 * Plugin Name: Super Advanced Posts  
 * Plugin URI: http://www.finestdeveloper.com/plugins/super-advanced-posts  
-* Description: Addsp a widget that can display recent posts and other posts from All categories and taxonomy or from custom post types.
+* Description: Adds a widget that can display recent posts and other posts from All categories and taxonomy or from custom post types.
 * Version: 3.1 
 * Author: Tarun Yaduvanshi
 * Author URI: http://www.finestdeveloper.com
