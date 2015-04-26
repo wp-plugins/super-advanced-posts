@@ -12,6 +12,8 @@ Tested up to: 4.1.2
 
 Stable tag: 4.2
 
+* Add Ajax in widgets Filter Taxonomy and Terms
+* More easily and dynamic Post by Filter
 
 Adds a widget that can display recent posts and other posts from all categories and taxonomy or from custom post types.
 
@@ -20,6 +22,11 @@ Adds a widget that can display recent posts and other posts from all categories 
 
 
 Super Advanced Posts Plugin is a light Plugin advanced version of the WordPress Posts widget allowing increased customization to display recent posts and other posts from all categories and taxonomy or from custom post types.
+
+
+New Features:
+* Add Ajax in widgets Filter Taxonomy and Terms
+* More easily and dynamic Post by Filter
 
 
 Features:
@@ -62,8 +69,8 @@ See documentation at http://www.finestdeveloper.com/plugins/super-advanced-posts
 
 3.1
 
-	* Add Ajax in Filter Taxonomy and Terms
-	* More easily  and dynamic Post by Filter
+	* Add Ajax in widgets Filter Taxonomy and Terms
+	* More easily and dynamic Post by Filter
 
 2.1
 
