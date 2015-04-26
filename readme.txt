@@ -4,7 +4,7 @@ Contributors: tarunyaduvanshi , deepaksharma
 
 Donate link: http://www.finestdeveloper.com/
 
-Tags: category, taxonomy, posts, recent, recent posts, widget, post-plugins
+Tags: category, taxonomy, posts, recent, recent posts, widget, post-plugins, terms
 
 Requires at least: 3.0
 
