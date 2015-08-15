@@ -8,9 +8,9 @@ Tags: category, taxonomy, posts, recent, recent posts, widget, post-plugins, ter
 
 Requires at least: 3.0
 
-Tested up to: 4.2.2
+Tested up to: 4.3
 
-Stable tag: 4.2
+Stable tag: 4.3
 
 * Add Ajax in widgets Filter Taxonomy and Terms.
 * More easily and dynamic Post by Filter.
